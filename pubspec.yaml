@@ -1,0 +1,13 @@
+name: objd_crafting
+description: A starting point for Dart libraries or applications.
+version: 0.1.0
+homepage: https://www.stevertus.com/tools/crafting
+author: Stevertus <stevertusyt@gmail.com>
+
+environment:
+  sdk: '>=2.3.0 <3.0.0'
+
+dependencies:
+  objd:
+    path: C:\webdev\Dart\objectiveD
+
