@@ -28,11 +28,11 @@ class BasicCraftingTable extends Widget {
               "##",
             ],
             "key": {
-              "#": {"item": "minecraft:oak_planks"}
+              "#": {"item": "minecraft:oak_planks"},
             },
-            "result": {"item": "minecraft:crafting_table"}
+            "result": {"item": "minecraft:crafting_table"},
           },
-        )
+        ),
       ],
     );
   }

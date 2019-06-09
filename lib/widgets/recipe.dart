@@ -2,7 +2,7 @@
 import 'dart:convert';
 
 import 'package:objd/core.dart';
-
+/// A basic recipe takes in ingredient Items with the slot and a result Item.
 class Recipe {
 
   bool _isShapeless = false;
@@ -15,21 +15,58 @@ class Recipe {
   int id; 
   Score _idScore;
   static int recipeId = 0;
+/// The recipes of a craftingtable are instantiated in the recipes field. A basic recipe takes in ingredient Items with the slot and a result Item.
+///
+/// |Recipe|  |
+/// |--|--|
+/// | Map<slot,Item> | The ingredients as a Map with the Slot(1 to 9) on the one side and your Item on the other |
+/// |Item| your result Item|
+/// |id| overrides the automatically generated id(optional) |
+/// |exactlyPlaced| bool that requires to leave all unused slots empty(default = false) |
+/// |exactResult| a number that limits the result count(optional) |
+///
+/// **Example:**
+/// ```dart
+/// Recipe(
+///           {
+///             1: Item(Block.oak_planks),
+///             2: Item(Block.oak_planks),
+///             4: Item(Block.oak_planks),
+///             5: Item(Block.oak_planks),
+///           },
+///           Item(Block.crafting_table,Count:2,nbt:{"MyNBT":1})
+/// )
+/// ```
+/// You can also set the Count variable of any of the items to generate a ratio. In this case you craft 2 craftingtables out of 4 oak_planks.
+  Recipe(this.ingredients,this.result,{this.id,this.exactlyPlaced = false,this.exactResult});
 
-  Recipe(this.ingredients,this.result,{this.id,this.exactlyPlaced = false,this.exactResult}){
-    _getid();
-  }
-
+/// The API also supports shapeless crafting. That means you can set the ingredients in any shape and it would be the same result.
+/// 
+/// |Recipe.shapeless|  |
+/// |--|--|
+/// | List\<Item> | The ingredients in any shape(without slots) |
+/// |...| stays the same|
+///
+/// **Example:**
+///
+/// ```dart
+/// Recipe.shapeless(
+///     [
+///        Item(Block.oak_planks),
+///        Item(ItemType.diamond)
+///     ],
+///     Item(ItemType.diamond_sword)
+/// )
+/// ```
   Recipe.shapeless(List<Item> ingreds,this.result,{this.id,this.exactlyPlaced = false,this.exactResult}){
     ingredients = {};
     for (var i = 0; i < ingreds.length; i++) {
       ingredients[i + 1] = ingreds[i];
     }
-    _getid();
     _isShapeless = true;
   }
-
-  Recipe.fromJson(Map<String,dynamic> json,{this.id,this.exactResult}){
+/// With objD you can also import usual minecraft recipes in json data. objD automatically parses that and converts it to a command.
+  Recipe.fromJson(Map<String,dynamic> json,{this.id,this.exactlyPlaced = false,this.exactResult}){
     
     exists(String key,[value]){
       if(value != null) return json[key] != null && json[key] == value;
@@ -60,10 +97,9 @@ class Recipe {
         ingredients[i] = Item.fromJson(keys[key]);
       });
     }
-    _getid();
   }
 
-  _getid(){
+  setid(){
     if(this.id != null) return;
 
     id = recipeId;
@@ -143,7 +179,7 @@ class Recipe {
     return If(_idScore.matches(id),Then: [
       replace,
       count,
-      if(exactResult != null && exactResult > 0) _resScore.set(exactResult)
+      if(exactResult != null && exactResult > 0) If(_resScore.matchesRange(Range(from: exactResult + 1)),Then:[_resScore.set(exactResult)])
     ]);
     
   }
