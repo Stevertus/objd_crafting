@@ -48,12 +48,12 @@ The recipes of a craftingtable are instantiated in the recipes field. A basic re
 ```dart
 Recipe(
           {
-            1: Item(Block.oak_planks),
-            2: Item(Block.oak_planks),
-            4: Item(Block.oak_planks),
-            5: Item(Block.oak_planks),
+            1: Item(Blocks.oak_planks),
+            2: Item(Blocks.oak_planks),
+            4: Item(Blocks.oak_planks),
+            5: Item(Blocks.oak_planks),
           },
-          Item(Block.crafting_table,Count:2,nbt:{"MyNBT":1})
+          Item(Blocks.crafting_table,Count:2,nbt:{"MyNBT":1})
 )
 ```
 You can also set the Count variable of any of the items to generate a ratio. In this case you craft 2 craftingtables out of 4 oak_planks.
@@ -71,10 +71,10 @@ The API also supports shapeless crafting. That means you can set the ingredients
 ```dart
 Recipe.shapeless(
     [
-       Item(Block.oak_planks),
-       Item(ItemType.diamond)
+       Item(Blocks.oak_planks),
+       Item(Items.diamond)
     ],
-    Item(ItemType.diamond_sword)
+    Item(Items.diamond_sword)
 )
 ```
 ### Recipe.fromJson
