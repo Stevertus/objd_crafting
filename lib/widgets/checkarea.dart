@@ -28,7 +28,7 @@ class CheckArea extends Widget {
   Widget generate(Context context) {
     return For.of([
       // add Result nbt tag to divide result and usual items
-      If(Score.fromSelected(context.packId + 'ID').matchesRange(Range(from: 0)),
+      If(Score.fromSelected(context.packId + 'ID').matchesRange(Range.from(0)),
           then: [
             Data.modify(Location.here(),
                 path: 'Items[{Slot:15b}].tag.${context.packId}Result',
@@ -77,6 +77,18 @@ class CheckArea extends Widget {
             Entity.Selected().removeTag('${context.packId}BlockE')
           ],
         ),
+
+      If(
+        Condition.block(Location.rel(y: -1), block: Blocks.hopper),
+        then: [
+          Data.merge(
+            Location.rel(y: -1),
+            nbt: {
+              'TransferCooldown': 20,
+            },
+          )
+        ],
+      )
     ]);
   }
 }

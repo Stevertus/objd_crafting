@@ -49,8 +49,8 @@ class ChestFile extends Widget {
           // previous count is realistic and bigger than the current count
           // then someone took something out of the chest
           Condition.and([
-            _resID.matchesRange(Range(from: 0)),
-            _resDCount.matchesRange(Range(from: 1, to: 999)),
+            _resID.matchesRange(Range.from(0)),
+            _resDCount.matchesRange(Range(1, 999)),
             _resDCount.isBigger(_resCount)
           ]),
           then: [
@@ -85,9 +85,9 @@ class ChestFile extends Widget {
           // Replace Empty Slots with placeholder and set drop item
           PlaceholderSetDetect(placeholder, guiModel, useBarrel),
           // Clear Player Inventory for Placeholder
-          Clear(Entity.All(distance: Range(to: 4)), placeholder),
+          Clear(Entity.All(distance: Range.to(4)), placeholder),
           if (guiModel != null)
-            Clear(Entity.All(distance: Range(to: 4)), guiModel),
+            Clear(Entity.All(distance: Range.to(4)), guiModel),
 
           DropItem(),
         ]),
@@ -114,7 +114,7 @@ class ChestFile extends Widget {
         File.execute(recipeSource, create: false),
 
       // matches Result
-      If(_resID.matchesRange(Range(from: 0)), targetFileName: 'hasid', then: [
+      If(_resID.matchesRange(Range.from(0)), targetFileName: 'hasid', then: [
         // find the final Count
         _resCount.findSmallest(
           List.generate(
@@ -136,7 +136,7 @@ class ChestFile extends Widget {
         _resDCount.setEqual(_resCount),
       ]),
       // Else clear slot
-      If.not(_resID.matchesRange(Range(from: 0)),
+      If.not(_resID.matchesRange(Range.from(0)),
           then: [Data.remove(Location.here(), path: 'Items[{Slot:15b}]')]),
     ]);
   }

@@ -82,7 +82,7 @@ class CraftingTable extends Widget {
                 as: Entity(type: Entities.armor_stand, tags: [name + 'Table']),
                 at: Entity.Selected(),
                 If: Condition(
-                  Entity.Player(distance: Range(to: 6)),
+                  Entity.Player(distance: Range.to(6)),
                 ),
 
                 /// runs subfunctions

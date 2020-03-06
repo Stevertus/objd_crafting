@@ -1,5 +1,3 @@
-import 'dart:convert';
-
 import 'package:objd/core.dart';
 
 /// A basic recipe takes in ingredient Items with the slot and a result Item.
@@ -151,7 +149,7 @@ class Recipe {
         res.addAll([
           Extend('load', child: Score.con(it.count)),
           If.not(
-            mycount.matchesRange(Range(from: it.count)),
+            mycount.matchesRange(Range.from(it.count)),
             then: [mycount.reset()],
           ),
           mycount.divideByScore(
@@ -210,7 +208,7 @@ class Recipe {
       replace,
       count,
       if (exactResult != null && exactResult > 0)
-        If(_resScore.matchesRange(Range(from: exactResult + 1)),
+        If(_resScore.matchesRange(Range.from(exactResult + 1)),
             then: [_resScore.set(exactResult)])
     ]);
   }
