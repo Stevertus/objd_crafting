@@ -12,10 +12,12 @@ class ChestFile extends Widget {
     this.guiModel,
     this.useBarrel,
   ) {
-    if (placeholder != null && placeholder.tag == null) placeholder.tag = {};
+    if (placeholder != null && placeholder.tag == null) {
+      placeholder = placeholder.copyWith(nbt: {});
+    }
     if (guiModel != null) {
-      guiModel.tag ??= {};
-      guiModel.slot ??= Slot.chest(3, 5);
+      guiModel = guiModel.copyWith(
+          nbt: guiModel.tag ?? {}, slot: guiModel.slot ?? Slot.chest(3, 5));
     }
   }
 

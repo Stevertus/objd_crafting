@@ -138,10 +138,13 @@ class Recipe {
         throw ('Please insert a number between 1 and 9 as recipe ingredient!');
       }
       unused.remove(i);
-      var cloned = Item.clone(it);
-      cloned.count = null;
-      cloned.slot = Slot.craft(i);
-      if (isShapeless) cloned.slot = null;
+      var cloned = it.copyWith(
+        count: null,
+        slot: isShapeless ? null : Slot.craft(i),
+      );
+      // cloned.count = null;
+      // cloned.slot = Slot.craft(i);
+      // if (isShapeless) cloned.slot = null;
       items.add(cloned.getMap());
 
       if (it.count != null && it.count > 0) {

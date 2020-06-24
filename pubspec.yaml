@@ -1,14 +1,15 @@
 name: objd_crafting
 description: This is an objD extension for a customizable crafting API
-version: 0.1.3
+version: 0.1.4
 homepage: https://www.stevertus.com/tools/crafting
-author: Stevertus <stevertusyt@gmail.com>
+repository: https://github.com/Stevertus/objd_crafting
+issue_tracker: https://github.com/Stevertus/objd_crafting/issues
 
 environment:
   sdk: ">=2.3.0 <3.0.0"
 
 dependencies:
-  objd: ^0.3.3-beta.2
+  objd: ^0.3.3-1
 
 dev_dependencies:
   pedantic: ^1.9.0
