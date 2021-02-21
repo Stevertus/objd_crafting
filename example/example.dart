@@ -2,11 +2,14 @@ import 'package:objd/core.dart';
 import 'package:objd_crafting/objd_crafting.dart';
 
 void main(List<String> args) {
-  createProject(Project(
-    name: 'My Crafting Pack',
-    target: '../',
-    generate: BasicCraftingTable(),
-  ));
+  createProject(
+    Project(
+      name: 'My Crafting Pack',
+      target: './',
+      generate: BasicCraftingTable(),
+    ),
+    args,
+  );
 }
 
 class BasicCraftingTable extends Widget {
@@ -15,7 +18,7 @@ class BasicCraftingTable extends Widget {
   @override
   Widget generate(Context context) {
     return CraftingTable(
-      name: 'craftt',
+      name: 'craft',
       blockModel: Item(Blocks.crafting_table, count: 1),
       placeholder: Item(
         Blocks.gray_stained_glass_pane,
@@ -37,7 +40,7 @@ class BasicCraftingTable extends Widget {
           },
         ),
         Recipe.shapeless(
-          [Item(Items.apple, slot: Slot.Container0)],
+          [Item(Items.apple)],
           Items.crafting_table,
         ),
       ],
@@ -75,6 +78,8 @@ class ComplexCraftingTable extends Widget {
           Kill(Entity.Selected())
         ])
       ],
+      giveCommandFunction: true,
+      invisibleHitbox: true,
       placeholder: Item(
         Items.stone_hoe,
         model: 3190001,
@@ -94,8 +99,8 @@ class ComplexCraftingTable extends Widget {
         Recipe.fromJson(
           {
             'pattern': [
-              '##',
-              '##',
+              '## ',
+              '## ',
             ],
             'key': {
               '#': {'item': 'minecraft:oak_planks'}

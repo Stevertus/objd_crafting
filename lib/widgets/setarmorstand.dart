@@ -16,10 +16,16 @@ class SetArmorstand extends Widget {
   @override
   Widget generate(Context context) {
     return For.of([
-      Execute(children: [
-        ArmorStand.staticMarker(Location.rel(y: -0.5),
-            head: blockModel, small: true, tags: ['${context.packId}Table'])
-      ]).center(),
+      Execute(
+        children: [
+          ArmorStand.staticMarker(
+            Location.rel(y: -0.5),
+            head: blockModel,
+            small: true,
+            tags: ['${context.packId}Table'],
+          )
+        ],
+      ).center(),
       SetBlock(
         Block.nbt(
           useBarrel ? Blocks.barrel : Blocks.chest,

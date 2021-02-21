@@ -68,7 +68,9 @@ class CraftingTable extends Widget {
   @override
   Widget generate(Context context) {
     Recipe.recipeId = id;
-    if (id != null && recipes != null) recipes.forEach((rec) => rec.setid());
+    if (id != null && recipes != null) {
+      recipes = recipes.map((rec) => rec.setid()).toList();
+    }
     return Pack(
         name: name,
         load: File('load'),
@@ -76,8 +78,7 @@ class CraftingTable extends Widget {
           'main',
           child: For.of([
             /// Main File
-            if (main != null)
-              ...main,
+            if (main != null) ...main,
             Execute(
                 as: Entity(type: Entities.armor_stand, tags: [name + 'Table']),
                 at: Entity.Selected(),

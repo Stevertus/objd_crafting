@@ -1,3 +1,8 @@
+## 0.1.5
+
+- this package uses the Recipe Widget from objD Core now
+- updated for objD 0.3.6
+
 ## 0.1.4
 
 - updated for Minecraft 1.16 and objd 0.3.3-1
