@@ -2,13 +2,13 @@ import 'package:objd/core.dart';
 
 /// Checks the Location of the chest before starting the crafting process
 class CheckArea extends Widget {
-  Widget onDestroy;
-  TextComponent displayName;
+  Widget? onDestroy;
+  TextComponent? displayName;
   Block _block = Blocks.chest;
   bool invisible;
 
   CheckArea(this.onDestroy, this.displayName, bool isBarrel, this.invisible) {
-    if (isBarrel != null && isBarrel) {
+    if (isBarrel) {
       _block = Blocks.barrel;
       invisible = false;
     }
@@ -16,13 +16,13 @@ class CheckArea extends Widget {
       Block.nbt(
         _block,
         states: invisible ? {'type': 'left'} : null,
-        nbt: displayName != null ? {'CustomName': displayName.toJson()} : null,
+        nbt: displayName != null ? {'CustomName': displayName!.toJson()} : null,
       ),
       location: Location.here(),
     );
   }
 
-  SetBlock _setTable;
+  late SetBlock _setTable;
 
   @override
   Widget generate(Context context) {
@@ -49,7 +49,7 @@ class CheckArea extends Widget {
             'tag': {'${context.packId}Result': 1}
           }
         })),
-        if (onDestroy != null) onDestroy,
+        if (onDestroy != null) onDestroy!,
         Kill(Entity.Selected())
       ]),
       // testing for block in east direction(which updates state)

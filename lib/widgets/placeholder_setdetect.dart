@@ -2,11 +2,11 @@ import 'package:objd/core.dart';
 
 class PlaceholderSetDetect extends Widget {
   Item placeholder;
-  Item guiModel;
+  Item? guiModel;
   Block _block = Blocks.chest;
 
   PlaceholderSetDetect(this.placeholder, this.guiModel, bool useBarrel) {
-    if (useBarrel != null && useBarrel) _block = Blocks.barrel;
+    if (useBarrel) _block = Blocks.barrel;
   }
 
   @override
@@ -24,10 +24,26 @@ class PlaceholderSetDetect extends Widget {
               // not empty
               // and not Result item
               Condition.and([
-                Block.nbt(_block, strNbt: '{Items:[{Slot:15b,Count:0b}]}'),
-                Block.nbt(_block,
-                    strNbt:
-                        '{Items:[{Slot:15b,tag:{${context.packId}Result:1}}]}'),
+                Block.nbt(
+                  _block,
+                  nbt: {
+                    'Items': [
+                      {'Slot': Byte(15), 'Count': Byte(0)}
+                    ]
+                  },
+                  strNbt: '{Items:[{Slot:15b,Count:0b}]}',
+                ),
+                Block.nbt(
+                  _block,
+                  nbt: {
+                    'Items': [
+                      {
+                        'Slot': Byte(15),
+                        'tag': {'${context.packId}Result': 1}
+                      }
+                    ]
+                  },
+                ),
               ]),
               then: [
                 // clear it and drop it
@@ -44,26 +60,45 @@ class PlaceholderSetDetect extends Widget {
         var replaceItem = placeholder;
 
         if (guiModel != null &&
-            guiModel.slot != null &&
-            guiModel.slot.id == i) {
-          replaceItem = guiModel;
+            guiModel!.slot != null &&
+            guiModel!.slot!.id == i) {
+          replaceItem = guiModel!;
         }
 
         var throwItem = If.not(
           Condition.and([
             // not empty
             // and not Placeholder item
-            Block.nbt(_block, strNbt: '{Items:[{Slot:${i}b,Count:0b}]}'),
-            Block.nbt(_block,
-                strNbt:
-                    '{Items:[{Slot:${i}b,tag:{${context.packId}Placeholder:1}}]}'),
+            Block.nbt(
+              _block,
+              nbt: {
+                'Items': [
+                  {'Slot': Byte(i), 'Count': Byte(0)}
+                ]
+              },
+            ),
+            Block.nbt(
+              _block,
+              nbt: {
+                'Items': [
+                  {
+                    'Slot': Byte(i),
+                    'tag': {'${context.packId}Placeholder': 1},
+                  }
+                ],
+              },
+            ),
           ]),
           then: [
             // Drop the Item
-            Data.modify(Entity.Selected(),
-                path: 'HandItems[0]',
-                modify: DataModify.set(Location.here(),
-                    fromPath: 'Items[{Slot:${i}b}]'))
+            Data.modify(
+              Entity.Selected(),
+              path: 'HandItems[0]',
+              modify: DataModify.set(
+                Location.here(),
+                fromPath: 'Items[{Slot:${i}b}]',
+              ),
+            )
           ],
         );
 
@@ -73,13 +108,22 @@ class PlaceholderSetDetect extends Widget {
             throwItem,
             If.not(
               // not Placeholder
-              Block.nbt(_block,
-                  strNbt:
-                      '{Items:[{Slot:${i}b,tag:{${context.packId}Placeholder:1}}]}'),
+              Block.nbt(
+                _block,
+                nbt: {
+                  'Items': [
+                    {'Slot': Byte(i)}
+                  ],
+                  'tag': {'${context.packId}Placeholder': 1}
+                },
+              ),
               then: [
                 // set Placeholder
-                ReplaceItem.block(Location.here(),
-                    slot: Slot.chest(i + 1), item: replaceItem),
+                ReplaceItem.block(
+                  Location.here(),
+                  slot: Slot.chest(i + 1),
+                  item: replaceItem,
+                ),
               ],
             ),
           ],

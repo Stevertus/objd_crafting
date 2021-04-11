@@ -1,9 +1,12 @@
 import 'package:objd/core.dart';
 
 extension Generator on Recipe {
-  Widget getCommands({String packid = 'tpcraft', bool useBarrel = false}) {
+  Widget getCommands({
+    String packid = 'tpcraft',
+    bool useBarrel = false,
+  }) {
     var _block = Blocks.chest;
-    if (useBarrel != null && useBarrel) _block = Blocks.barrel;
+    if (useBarrel) _block = Blocks.barrel;
     final _idScore = Score.fromSelected(packid + 'ID');
     var items = <Map>[];
     var res = <Widget>[];
@@ -20,16 +23,16 @@ extension Generator on Recipe {
       );
       items.add(cloned.getMap());
 
-      if (it.count != null && it.count > 0) {
+      if (it.count != null && it.count! > 0) {
         var mycount = Score.fromSelected(packid + 'Count$i');
         res.addAll([
-          Extend('load', child: Score.con(it.count)),
+          Extend('load', child: Score.con(it.count!)),
           If.not(
             mycount.matchesRange(Range.from(it.count)),
             then: [mycount.reset()],
           ),
           mycount.divideByScore(
-            Score.con(it.count),
+            Score.con(it.count!),
           )
         ]);
       }
@@ -58,13 +61,13 @@ extension Generator on Recipe {
         Block.nbt(_block, nbt: {'Items': items}),
         if (unusedConditions.isNotEmpty) ...unusedConditions
       ]),
-      then: [_idScore.set(id)],
+      then: [_idScore.set(id!)],
     );
 
     return For.of([
       setid,
       if (res.isNotEmpty)
-        If(_idScore.matches(id), then: res, encapsulate: false)
+        If(_idScore.matches(id!), then: res, encapsulate: false)
     ]);
   }
 
@@ -89,19 +92,19 @@ extension Generator on Recipe {
     final _idScore = Score.fromSelected(packid + 'ID');
     Widget replace = ReplaceItem.block(Location.here(),
         slot: Slot.Container15, item: result);
-    Widget count;
+    Widget? count;
     if (result.count != null) {
       count = For.of([
-        Extend('load', child: Score.con(result.count)),
-        _resScore.multiplyByScore(Score.con(result.count))
+        Extend('load', child: Score.con(result.count!)),
+        _resScore.multiplyByScore(Score.con(result.count!))
       ]);
     }
-    return If(_idScore.matches(id), then: [
+    return If(_idScore.matches(id!), then: [
       replace,
-      count,
-      if (exactResult != null && exactResult > 0)
-        If(_resScore.matchesRange(Range.from(exactResult + 1)),
-            then: [_resScore.set(exactResult)])
+      if (count != null) count,
+      if (exactResult != null && exactResult! > 0)
+        If(_resScore.matchesRange(Range.from(exactResult! + 1)),
+            then: [_resScore.set(exactResult!)])
     ]);
   }
 }

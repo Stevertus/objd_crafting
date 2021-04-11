@@ -7,6 +7,7 @@ void main(List<String> args) {
       name: 'My Crafting Pack',
       target: './',
       generate: BasicCraftingTable(),
+      version: 16,
     ),
     args,
   );

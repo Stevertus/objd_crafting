@@ -9,16 +9,16 @@ import 'setarmorstand.dart';
 /// The CraftingTable is the core widget to instantiate a custom crafter.
 class CraftingTable extends Widget {
   String name;
-  TextComponent displayName;
+  TextComponent? displayName;
   int id;
-  List<Recipe> recipes;
-  String recipeSource;
-  String recipeResultSource;
-  Item placeholder;
-  Item guiModel;
-  List<Widget> main;
-  Item blockModel;
-  Widget onDestroy;
+  List<Recipe>? recipes;
+  String? recipeSource;
+  String? recipeResultSource;
+  Item? placeholder;
+  Item? guiModel;
+  List<Widget>? main;
+  Item? blockModel;
+  Widget? onDestroy;
   bool giveCommandFunction = false;
   bool useBarrel = false;
   bool invisibleHitbox;
@@ -69,7 +69,7 @@ class CraftingTable extends Widget {
   Widget generate(Context context) {
     Recipe.recipeId = id;
     if (id != null && recipes != null) {
-      recipes = recipes.map((rec) => rec.setid()).toList();
+      recipes = recipes!.map((rec) => rec.setid()).toList();
     }
     return Pack(
         name: name,
@@ -78,7 +78,7 @@ class CraftingTable extends Widget {
           'main',
           child: For.of([
             /// Main File
-            if (main != null) ...main,
+            if (main != null) ...main!,
             Execute(
                 as: Entity(type: Entities.armor_stand, tags: [name + 'Table']),
                 at: Entity.Selected(),
@@ -92,7 +92,7 @@ class CraftingTable extends Widget {
                     'checkarea',
                     child: CheckArea(
                       onDestroy,
-                      displayName,
+                      displayName!,
                       useBarrel,
                       invisibleHitbox,
                     ),
@@ -103,18 +103,26 @@ class CraftingTable extends Widget {
         ),
         files: [
           /// Crafting file
-          File('crafting',
-              child: ChestFile(recipes != null, recipeSource,
-                  recipeResultSource, placeholder, guiModel, useBarrel)),
+          File(
+            'crafting',
+            child: ChestFile(
+              recipes != null,
+              recipeSource,
+              recipeResultSource,
+              placeholder,
+              guiModel,
+              useBarrel,
+            ),
+          ),
 
           /// all Recipes
           if (recipes != null)
             File(
               'recipes/$name',
               child: For(
-                to: recipes.length - 1,
+                to: recipes!.length - 1,
                 create: (i) =>
-                    recipes[i].getCommands(packid: name, useBarrel: useBarrel),
+                    recipes![i].getCommands(packid: name, useBarrel: useBarrel),
               ),
             ),
 
@@ -123,21 +131,24 @@ class CraftingTable extends Widget {
             File(
               'recipes/res_$name',
               child: For(
-                to: recipes.length - 1,
-                create: (i) => recipes[i].getResult(packid: name),
+                to: recipes!.length - 1,
+                create: (i) => recipes![i].getResult(packid: name),
               ),
             ),
           File(
             'set',
             child: SetArmorstand(
               blockModel,
-              displayName,
+              displayName!,
               useBarrel,
               invisibleHitbox,
             ),
           ),
-          if (giveCommandFunction != null && giveCommandFunction)
-            File('getcommand', child: GetCommand(useBarrel))
+          if (giveCommandFunction)
+            File(
+              'getcommand',
+              child: GetCommand(useBarrel),
+            )
         ]);
   }
 }

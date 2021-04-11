@@ -1,4 +1,10 @@
-## 0.1.5
+## 0.2.0
+
+- updated to objd 0.4.1
+- changed strnbt to nbt
+- added null safety support
+
+  0.1.5
 
 - this package uses the Recipe Widget from objD Core now
 - updated for objD 0.3.6

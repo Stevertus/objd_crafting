@@ -1,7 +1,7 @@
 import 'package:objd/core.dart';
 
 class SetArmorstand extends Widget {
-  Item blockModel;
+  Item? blockModel;
   TextComponent displayName;
   bool useBarrel;
   bool invisible;

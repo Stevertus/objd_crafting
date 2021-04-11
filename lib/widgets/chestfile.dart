@@ -12,36 +12,34 @@ class ChestFile extends Widget {
     this.guiModel,
     this.useBarrel,
   ) {
-    if (placeholder != null && placeholder.tag == null) {
-      placeholder = placeholder.copyWith(nbt: {});
+    if (placeholder != null && placeholder!.tag == null) {
+      placeholder = placeholder!.copyWith(nbt: {});
     }
     if (guiModel != null) {
-      guiModel = guiModel.copyWith(
-          nbt: guiModel.tag ?? {}, slot: guiModel.slot ?? Slot.chest(3, 5));
+      guiModel = guiModel!.copyWith(
+        nbt: guiModel!.tag ?? {},
+        slot: guiModel!.slot ?? Slot.chest(3, 5),
+      );
     }
   }
 
   bool hasRecipes = true;
   bool useBarrel;
-  String recipeSource;
-  String recipeResultSource;
-  Item placeholder;
-  Item guiModel;
-
-  Score _resID;
-  Score _resCount;
-  Score _resDCount;
+  String? recipeSource;
+  String? recipeResultSource;
+  Item? placeholder;
+  Item? guiModel;
 
   @override
   Widget generate(Context context) {
     if (placeholder != null) {
-      placeholder.tag['${context.packId}Placeholder'] = 1;
+      placeholder!.tag!['${context.packId}Placeholder'] = 1;
     }
-    if (guiModel != null) guiModel.tag['${context.packId}Placeholder'] = 1;
+    if (guiModel != null) guiModel!.tag!['${context.packId}Placeholder'] = 1;
 
-    _resID = Score.fromSelected(context.packId + 'ID');
-    _resCount = Score.fromSelected(context.packId + 'Count');
-    _resDCount = Score.fromSelected(context.packId + 'dCount');
+    final _resID = Score.fromSelected(context.packId + 'ID');
+    final _resCount = Score.fromSelected(context.packId + 'Count');
+    final _resDCount = Score.fromSelected(context.packId + 'dCount');
 
     return For.of([
       /// TAKE OUT
@@ -85,7 +83,7 @@ class ChestFile extends Widget {
       if (placeholder != null)
         For.of([
           // Replace Empty Slots with placeholder and set drop item
-          PlaceholderSetDetect(placeholder, guiModel, useBarrel),
+          PlaceholderSetDetect(placeholder!, guiModel, useBarrel),
           // Clear Player Inventory for Placeholder
           Clear(Entity.All(distance: Range.to(4)), placeholder),
           if (guiModel != null)
@@ -110,10 +108,8 @@ class ChestFile extends Widget {
             );
           }),
       // Execute matching functions
-      if (hasRecipes)
-        File.execute('recipes/' + context.packId, create: false),
-      if (recipeSource != null)
-        File.execute(recipeSource, create: false),
+      if (hasRecipes) File.execute('recipes/' + context.packId, create: false),
+      if (recipeSource != null) File.execute(recipeSource!, create: false),
 
       // matches Result
       If(_resID.matchesRange(Range.from(0)), targetFileName: 'hasid', then: [
@@ -128,7 +124,7 @@ class ChestFile extends Widget {
         if (hasRecipes)
           File.execute('recipes/res_' + context.packId, create: false),
         if (recipeResultSource != null)
-          File.execute(recipeResultSource, create: false),
+          File.execute(recipeResultSource!, create: false),
         Data.fromScore(
           Location.here(),
           path: 'Items[{Slot:15b}].Count',
